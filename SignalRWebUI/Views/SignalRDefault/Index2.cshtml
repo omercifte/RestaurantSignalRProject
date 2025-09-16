@@ -1,0 +1,63 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@* bu scripleri eklemeseydim @section Scripts{} içinde olacaktı aşağıdakiler *@
+
+
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<script type="text/javascript">
+
+							$(document).ready(() => {
+
+								var connection = new signalR.HubConnectionBuilder()
+									.withUrl("http://localhost:5003/SignalRHub/")
+									.build();
+
+								$("#connstatus").text(connection.state);
+							
+
+								connection.start().then(() => {
+									$("#connstatus").text(connection.state);
+										setInterval(() => {
+									connection.invoke("SendCategoryCount");
+								}, 1000);
+									
+								}).catch(err => {
+									console.log(err);
+								});
+
+
+
+						connection.on("ReceiveCategoryCount", (value) => {
+								$("#categorycount").text(value);
+							});
+							});
+					</script>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="row">
+	<div class="col-md-8 offset-2">
+		<div class="alert alert-success">Bağlantı Durumu:<strong id="connstatus"></strong></div>
+		<div class="alert alert-info">Kategori sayısı:<strong id="categorycount"></strong></div>
+	</div>
+</div>
