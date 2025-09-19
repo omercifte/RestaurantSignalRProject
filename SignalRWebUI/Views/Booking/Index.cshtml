@@ -4,9 +4,73 @@
 	Layout = "~/Views/AdminLayout/Index.cshtml";
 	int count = 0;
 }
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 <div class="midde_cont">
 	<div class="container-fluid">
+
+		<script type="text/javascript">
+
+				$(document).ready(() => {
+
+					var connection = new signalR.HubConnectionBuilder()
+						.withUrl("http://localhost:5003/SignalRHub/")
+						.build();
+
+					$("#connstatus").text(connection.state);
+
+
+					connection.start().then(() => {
+						$("#connstatus").text(connection.state);
+							setInterval(() => {
+						connection.invoke("GetBookingList");
+					}, 5000);
+
+					}).catch(err => {
+						console.log(err);
+					});
+
+
+
+			connection.on("ReceiveBookingList", (value) => {
+					console.log(value);
+					let tablehtml=`<table class=table mt-3><thead>
+										<tr>
+										<th>#</th>
+										<th>Ad Soyad</th>
+										<th>Telefon</th>
+										<th>Kişi Sayısı</th>
+										<th>Rezervasyon Durumu</th>
+										<th>Sil</th>
+										<th>Güncelle</th>
+										</tr>
+										</thead>`
+										$.each(value,(index,item) =>{
+											tablehtml+=`<tr>
+											<td>${item.bookingID}</td>
+											<td>${item.name}</td>
+											<td>${item.phone}</td>
+											<td>${item.personCount}</td>
+											<td>${"Rezervasyon Alındı"}</td>
+											<td><a href="/Booking/DeleteBooking/${item.bookingID}" class="btn btn-outline-danger">Sil</a></td>
+											<td><a href="/Booking/UpdateBooking/${item.bookingID}" class="btn btn-outline-success">Güncelle</a></td>
+											</tr>`
+										});
+										tablehtml+="</tbody></table>";
+										$("#bookingList").html(tablehtml);
+
+					
+				});
+
+				});
+		</script>
+
+
 		<div class="row column_title">
 			<div class="col-md-12">
 				<div class="page_title">
@@ -26,36 +90,9 @@
 					</div>
 					<div class="table_section padding_infor_info">
 						<div class="table-responsive-sm">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>#</th>
-										<th>Ad Soyad</th>
-										<th>Telefon</th>
-										<th>Kişi Sayısı</th>
-										<th>Rezervasyon Durumu</th>
-										<th>Sil</th>
-										<th>Güncelle</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var item in Model)
-									{
-										count++;
-										<tr>
-											<td>@count</td>
-											<td>@item.Name</td>
-											<td>@item.Phone</td>
-											<td>@item.PersonCount</td>
-											<td>Rezervasyon Alındı</td>
-											<td><a href="/Booking/DeleteBooking/@item.BookingID" class="btn btn-outline-danger">Sil</a></td>
-											<td><a href="/Booking/UpdateBooking/@item.BookingID" class="btn btn-outline-success">Güncelle</a></td>
-										</tr>
-									}
-
-								</tbody>
-							</table>
+							<div id="bookingList"></div>
 							<a href="/Booking/CreateBooking/" class="btn btn-outline-primary">Yeni Rezervasyon Girişi</a>
+							
 						</div>
 					</div>
 				</div>

@@ -7,6 +7,7 @@ using SignalRDataAccessLayer.Abstract;
 using SignalRDataAccessLayer.Concrete;
 using SignalRDataAccessLayer.EntityFramework;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +73,14 @@ builder.Services.AddScoped<ITableDal, EfTableDal>();
 
 builder.Services.AddScoped<ISliderService, SliderManager>();
 builder.Services.AddScoped<ISliderDal, EfSliderDal>();
+
+builder.Services.AddScoped<IBasketService, BasketManager>();
+builder.Services.AddScoped<IBasketDal, EfBasketDal>();
+
+builder.Services.AddControllersWithViews() //sepet iþlemleri için
+    .AddJsonOptions(options =>
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+);
 
 builder.Services.AddControllers();
 

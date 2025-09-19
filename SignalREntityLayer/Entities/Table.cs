@@ -11,5 +11,6 @@ namespace SignalREntityLayer.Entities
         public int TableID { get; set; }
         public string Name { get; set; }
         public bool TableStatus { get; set; }
+        public List<Basket> Baskets { get; set; }
     }
 }
