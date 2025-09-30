@@ -28,7 +28,6 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th>#</th>
 										<th>Başlık</th>
 										<th>Açıklama</th>
 										<th>Sil</th>
@@ -39,7 +38,6 @@
 									@foreach (var item in Model)
 									{
 										<tr>
-											<td>@item.AboutID</td>
 											<td>@item.Title</td>
 											<td>@item.Description</td>
 											<td><a href="/About/DeleteAbout/@item.AboutID" class="btn btn-outline-danger">Sil</a></td>

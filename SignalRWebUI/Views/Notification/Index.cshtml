@@ -1,0 +1,72 @@
+﻿@model List<ResultNotificationDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+	int count = 0;
+}
+
+<div class="midde_cont">
+	<div class="container-fluid">
+		<div class="row column_title">
+			<div class="col-md-12">
+				<div class="page_title">
+					<h2>Bildirim İşlemleri</h2>
+				</div>
+			</div>
+		</div>
+		<!-- row -->
+		<div class="row">
+			<!-- table section -->
+			<div class="col-md-12">
+				<div class="white_shd full margin_bottom_30">
+					<div class="full graph_head">
+						<div class="heading1 margin_0">
+							<h2>Bildirim Listesi</h2>
+						</div>
+					</div>
+					<div class="table_section padding_infor_info">
+						<div class="table-responsive-sm">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Açıklama</th>
+										<th>Tarih</th>
+										<th>Durum</th>
+										<th>Sil</th>
+										<th>Güncelle</th>
+										<th>Okundu İşaretle</th>
+										<th>Okunmadı İşaretle</th>
+										
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model)
+									{
+										count++;
+										<tr>
+											<th>@count</th>
+											<td>@item.Description</td>
+											<td>@item.Date</td>
+											<td>@item.Status</td>
+											<td><a href="/Notification/DeleteNotification/@item.NotificationID" class="btn btn-outline-danger">Sil</a></td>
+											<td><a href="/Notification/UpdateNotification/@item.NotificationID" class="btn btn-outline-success">Güncelle</a></td>
+											<td><a href="/Notification/NotificationStatusChangeToTrue/@item.NotificationID" class="btn btn-outline-warning">Okundu</a></td>
+											<td><a href="/Notification/NotificationStatusChangeToFalse/@item.NotificationID" class="btn btn-outline-secondary">Okunmadı</a></td>
+										</tr>
+									}
+
+								</tbody>
+							</table>
+							<a href="/Notification/CreateNotification/" class="btn btn-outline-primary">Yeni Bildirim Girişi</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+
+

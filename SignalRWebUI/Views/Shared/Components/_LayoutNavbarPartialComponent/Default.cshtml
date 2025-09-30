@@ -1,13 +1,76 @@
 ﻿
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
 <div class="topbar">
+
+	<script type="text/javascript">
+
+		$(document).ready(() => {
+
+			var connection = new signalR.HubConnectionBuilder()
+				.withUrl("http://localhost:5003/SignalRHub/")
+				.build();
+
+			$("#connstatus").text(connection.state);
+
+
+			connection.start().then(() => {
+				$("#connstatus").text(connection.state);
+					setInterval(() => {
+				connection.invoke("SendNotification");
+			}, 5000);
+
+			}).catch(err => {
+				console.log(err);
+			});
+
+
+
+		connection.on("ReceiveNotificationCountByFalse", (value) => {
+			$("#notificationcount").text(value);
+		});
+
+		connection.on("ReceiveNotificationListByFalse", (value) => {
+			$("#notilist").empty(); //bura olmazsa devamlı döngü şeklinde aynıları eklenip durur.
+			for(var i=0; i < value.length; i++) {
+				$("#notilist").append(`
+					<a href="#" class="dropdown-item">
+						<div class="${value[i].type}"></i></div>
+						<div class="notif-content">
+							<span class="block">
+								${value[i].description}
+							</span>
+							<span class="time">${value[i].date}</span>
+						</div>
+					</a>
+				`)
+			};
+		});
+
+
+
+		});
+	</script>
 	<nav class="navbar navbar-expand-lg navbar-light">
 		<div class="full">
 			<button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
-			
+
 			<div class="right_topbar">
 				<div class="icon_info">
 					<ul>
-						<li><a href="#"><i class="fa fa-bell-o"></i><span class="badge"></span></a></li>
+						<li>
+							<a class="dropdown-toggle" data-toggle="dropdown" id="navbarDropdown" role="button" alt="#" href="#"><i class="fa fa-bell-o"></i><span class="notification" id="notificationcount"></span></a>
+							<div class="dropdown-menu">
+								<div id="notilist"></div>
+					
+							</div>
+						</li>
+
 						<li><a href="#"><i class="fa fa-question-circle"></i></a></li>
 						<li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge"></span></a></li>
 					</ul>
@@ -15,9 +78,9 @@
 						<li>
 							<a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="~/pluto-1.0.0/images/layout_img/user_img.jpg" alt="#" /><span class="name_user">John David</span></a>
 							<div class="dropdown-menu">
-								<a class="dropdown-item" href="#">Siteye Git</a>
-								<a class="dropdown-item" href="#">Dashboard</a>
-								<a class="dropdown-item" href="#">Ayarlar</a>
+								<a class="dropdown-item" href="/Default/Index/">Siteye Git</a>
+								<a class="dropdown-item" href="/Register/Index">Yeni Kayıt</a>
+								<a class="dropdown-item" href="/Login/Index/">Giriş Yap</a>
 								<a class="dropdown-item" href="#"><span>Çıkış Yap</span> <i class="fa fa-sign-out"></i></a>
 							</div>
 						</li>

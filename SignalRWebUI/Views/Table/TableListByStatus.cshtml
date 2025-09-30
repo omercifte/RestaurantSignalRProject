@@ -1,0 +1,111 @@
+﻿@model List<ResultTableDto>
+@{
+	ViewData["Title"] = "TableListByStatus";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Ready Bootstrap Dashboard</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<link rel="stylesheet" href="~/Ready-Bootstrap-Dashboard-master/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+	<link rel="stylesheet" href="~/Ready-Bootstrap-Dashboard-master/assets/css/ready.css">
+	<link rel="stylesheet" href="~/Ready-Bootstrap-Dashboard-master/assets/css/demo.css">
+</head>
+
+<div class="content">
+	<div class="container-fluid">
+
+		<script type="text/javascript">
+
+				$(document).ready(() => {
+
+					var connection = new signalR.HubConnectionBuilder()
+						.withUrl("http://localhost:5003/SignalRHub/")
+						.build();
+
+					$("#connstatus").text(connection.state);
+
+
+					connection.start().then(() => {
+						$("#connstatus").text(connection.state);
+							setInterval(() => {
+						connection.invoke("GetTableStatus");
+					}, 1000);
+
+					}).catch(err => {
+						console.log(err);
+					});
+
+			connection.on("ReceiveTableStatus", (value) => {
+				var color = "";
+				var status = "";
+					console.log(value);
+					let tablehtml=`<div class="row">`
+					$.each(value,(index, item)=>{
+						if(item.status==true)
+						{
+							color="card card-stats card-danger"
+							status = "Masa Dolu";
+						}
+						else
+						{
+							color="card card-stats card-success"
+							status = "Masa Boş";
+						}
+						tablehtml += `<div class="col-md-3">
+                                            <div class="${color}">
+                                                <div class="card-body ">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <div class="icon-big text-center">
+                                                                <i class="la la-certificate"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-7 d-flex align-items-center">
+                                                            <div class="numbers">
+                                                                <p class="card-category">${item.name}</p>
+                                                                <h4 class="card-title">${status}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+                    });
+					tablehtml +="</div>";
+					$("#statuslist").html(tablehtml);
+				});
+
+				});
+		</script>
+
+		<h4 class="page-title">Masa Durumları Sayfası</h4>
+
+		@* @foreach(var item in Model)
+			{
+				if (item.TableStatus == false)
+				{
+					color = "card card-stats card-success";
+					status = "Masa Boş";
+				}
+				else
+				{
+					color = "card card-stats card-danger";
+					status = "Masa Dolu";
+				}
+
+			} *@
+		<div id="statuslist"></div>
+
+
+	</div>
+</div>

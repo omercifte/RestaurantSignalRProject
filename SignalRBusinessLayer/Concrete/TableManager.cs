@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SignalREntityLayer.Entities;
 using SignalRBusinessLayer.Abstract;
 using SignalRDataAccessLayer.Abstract;
 
@@ -20,22 +20,22 @@ namespace SignalRBusinessLayer.Concrete
 
         public void TAdd(Table entity)
         {
-            throw new NotImplementedException();
+            _tableDal.Add(entity);
         }
 
         public void TDelete(Table entity)
         {
-            throw new NotImplementedException();
+            _tableDal.Delete(entity);
         }
 
         public Table TGetByID(int id)
         {
-            throw new NotImplementedException();
+            return _tableDal.GetByID(id);
         }
 
         public List<Table> TGetListAll()
         {
-            throw new NotImplementedException();
+            return _tableDal.GetListAll();
         }
 
         public int TTableCount()
@@ -45,7 +45,7 @@ namespace SignalRBusinessLayer.Concrete
 
         public void TUpdate(Table entity)
         {
-            throw new NotImplementedException();
+            _tableDal.Update(entity);
         }
     }
 }

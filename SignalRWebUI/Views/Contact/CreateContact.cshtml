@@ -37,8 +37,32 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="FooterDescription">Açıklama Giriniz</label>
-                                <textarea rows="5" class="form-control" asp-for="FooterDescription" id="FooterDescription"></textarea>
+                                <label for="title">Alt Başlık</label>
+                                <input type="text" class="form-control" asp-for="FooterTitle" id="title">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="OpenDays">Açık Günler</label>
+                                <input type="text" class="form-control" asp-for="OpenDays" id="OpenDays">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="description">Açık Günler Açıklama</label>
+                                <input type="text" class="form-control" asp-for="OpenDaysDescription" id="description">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="OpenHours">Açık Saatler</label>
+                                <textarea rows="5" class="form-control" asp-for="OpenHours" id="OpenHours"></textarea>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="footerdescription">Alt Açıklama Alanı</label>
+                                <textarea rows="5" class="form-control" asp-for="FooterDescription" id="footerdescription"></textarea>
                             </div>
                         </div>
                         <div class="card-action">
