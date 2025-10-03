@@ -1,9 +1,16 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using SignalRDataAccessLayer.Concrete;
 using SignalREntityLayer.Entities;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+var requireAuthorizationPolicy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
 
 // Add services to the container.
 
@@ -14,7 +21,19 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 builder.Services.AddHttpClient();
 
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt =>
+{
+    opt.Filters.Add(new AuthorizeFilter(requireAuthorizationPolicy));
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login/Index/";
+    options.LogoutPath = "/Login/SignOut";
+    options.AccessDeniedPath = "/Login/AccessDenied";
+    options.Cookie.Name = "SignalRAppCookie";
+    options.ExpireTimeSpan = System.TimeSpan.FromDays(1);
+    options.SlidingExpiration = true;
+});
 
 
 var app = builder.Build();

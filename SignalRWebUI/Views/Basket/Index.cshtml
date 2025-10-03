@@ -45,15 +45,17 @@
 							</tr>
 
 						</thead>
-						@foreach (var item in Model)
+						@foreach (var group in Model.GroupBy(x=>x.ProductName))
 						{
+							var item = group.First();
+							var itemCount = group.Count();
 							basketTotalPrice = Model.Sum(x => x.Price);
 							count++;
 							<tbody class="align-middle">
 								<tr>
 									<td class="align-middle">@count</td>
 									<td class="align-middle">@item.ProductName</td>
-									<td class="align-middle">@item.Count</td>
+									<td class="align-middle">@itemCount</td>
 									<td class="align-middle">@item.Price</td>
 									<td class="align-middle">@item.TotalPrice</td>
 									<td class="align-middle btn-delete"><a  class="btn btn-sm btn-danger" href="/Basket/DeleteBasket/@item.BasketID"><i class="fa fa-times"></i></a></td>
