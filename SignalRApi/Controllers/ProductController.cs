@@ -77,16 +77,18 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
         {
-            _productService.TAdd(new Product()
-            {
-                ProductName = createProductDto.ProductName,
-                Description = createProductDto.Description,
-                Price = createProductDto.Price,
-                ImageUrl = createProductDto.ImageUrl,
-                ProductStatus = createProductDto.ProductStatus,
-                CategoryID = createProductDto.CategoryID
+            var value = _mapper.Map<Product>(createProductDto);
+            _productService.TAdd(value);
+            //_productService.TAdd(new Product()
+            //{
+            //    ProductName = createProductDto.ProductName,
+            //    Description = createProductDto.Description,
+            //    Price = createProductDto.Price,
+            //    ImageUrl = createProductDto.ImageUrl,
+            //    ProductStatus = createProductDto.ProductStatus,
+            //    CategoryID = createProductDto.CategoryID
 
-            });
+            //});
             return Ok("Ürün bilgisi eklendi");
         }
 
@@ -102,24 +104,34 @@ namespace SignalRApi.Controllers
         public IActionResult GetProduct(int id)
         {
             var value = _productService.TGetByID(id);
-            return Ok(value);
+            //return Ok(value);
+            return Ok(_mapper.Map<GetProductDto>(value));
         }
 
         [HttpPut]
         public IActionResult UpdateProduct(UpdateProductDto updateProductDto)
         {
-            _productService.TUpdate(new Product()
-            {
-                ProductID = updateProductDto.ProductID,
-                ProductName = updateProductDto.ProductName,
-                Description = updateProductDto.Description,
-                Price = updateProductDto.Price,
-                ImageUrl = updateProductDto.ImageUrl,
-                ProductStatus = updateProductDto.ProductStatus,
-                CategoryID = updateProductDto.CategoryID
+            var value = _mapper.Map<Product>(updateProductDto);
+            _productService.TUpdate(value);
+            //_productService.TUpdate(new Product()
+            //{
+            //    ProductID = updateProductDto.ProductID,
+            //    ProductName = updateProductDto.ProductName,
+            //    Description = updateProductDto.Description,
+            //    Price = updateProductDto.Price,
+            //    ImageUrl = updateProductDto.ImageUrl,
+            //    ProductStatus = updateProductDto.ProductStatus,
+            //    CategoryID = updateProductDto.CategoryID
 
-            });
+            //});
             return Ok("Ürün bilgisi güncellendi");
+        }
+
+        [HttpGet("GetLast9Products")]
+        public IActionResult GetLast9Products()
+        {
+            var values = _productService.TGetLast9Products();
+            return Ok(values);
         }
     }
 }

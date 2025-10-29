@@ -1,8 +1,11 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SignalRApi.Hubs;
 using SignalRBusinessLayer.Abstract;
 using SignalRBusinessLayer.Concrete;
+using SignalRBusinessLayer.ValidationRules.BookingValidations;
 using SignalRDataAccessLayer.Abstract;
 using SignalRDataAccessLayer.Concrete;
 using SignalRDataAccessLayer.EntityFramework;
@@ -82,6 +85,10 @@ builder.Services.AddScoped<INotificationDal, EfNotificationDal>();
 
 builder.Services.AddScoped<IMessageService, MessageManager>();
 builder.Services.AddScoped<IMessageDal, EfMessageDal>();
+
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingValidation>();
 
 
 builder.Services.AddControllersWithViews() //sepet iþlemleri için

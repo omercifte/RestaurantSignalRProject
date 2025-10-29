@@ -28,10 +28,10 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th>Konum</th>
 										<th>Telefon</th>
 										<th>Mail</th>
 										<th>Açıklama</th>
+										<th>Sil</th>
 										<th>Güncelle</th>
 									</tr>
 								</thead>
@@ -39,7 +39,6 @@
 									@foreach (var item in Model)
 									{
 										<tr>
-											<td>@item.Location</td>
 											<td>@item.Phone</td>
 											<td>@item.Mail</td>
 											<td>@item.FooterDescription</td>

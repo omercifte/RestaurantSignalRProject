@@ -17,6 +17,22 @@ namespace SignalRDataAccessLayer.EntityFramework
 
         }
 
+        public void ChangeTableStatusToFalse(int id)
+        {
+            using var context = new SignalRContext();
+            var values=context.Tables.Where(x => x.TableID == id).FirstOrDefault();
+            values.TableStatus = false;
+            context.SaveChanges();
+        }
+
+        public void ChangeTableStatusToTrue(int id)
+        {
+            using var context = new SignalRContext();
+            var values = context.Tables.Where(x => x.TableID == id).FirstOrDefault();
+            values.TableStatus = true;
+            context.SaveChanges();
+        }
+
         public int TableCount()
         {
             using var context = new SignalRContext();

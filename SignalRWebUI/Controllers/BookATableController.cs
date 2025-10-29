@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SignalRWebUI.Dtos.BookingdDtos;
 
 namespace SignalRWebUI.Controllers
@@ -15,8 +16,15 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("http://localhost:5003/api/Contact");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JArray item = JArray.Parse(responseBody);
+            string value = item[0]["location"].ToString();
+            ViewBag.location = value;
             return View();
         }
 
@@ -24,7 +32,14 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CreateBookingDto createBookingDto)
         {
-           
+            HttpClient client2 = new HttpClient();
+            HttpResponseMessage response = await client2.GetAsync("http://localhost:5003/api/Contact");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            JArray item = JArray.Parse(responseBody);
+            string value = item[0]["location"].ToString();
+            ViewBag.location = value;
+
             var client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(createBookingDto);
             StringContent stringContent = new StringContent(jsonData, System.Text.Encoding.UTF8, "application/json");
@@ -33,7 +48,13 @@ namespace SignalRWebUI.Controllers
             {
                 return RedirectToAction("Index","Default");
             }
-            return View();
+            else
+            {
+                var errorContent = await responseMessage.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, errorContent);
+                return View();
+            }
+            
         }
     }
 }

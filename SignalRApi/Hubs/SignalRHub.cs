@@ -81,6 +81,16 @@ namespace SignalRApi.Hubs
 
             var value3 = _tableService.TTableCount();
             await Clients.All.SendAsync("ReceiveTableCount", value3);
+
+            var value4 = _orderService.TTotalOrderCount();
+            await Clients.All.SendAsync("ReceiveTotalOrderCount", value4);
+
+            //var value5 = _orderService.TTotalOrderCount();
+            //await Clients.All.SendAsync("ReceiveTotalOrderCount", value5);
+
+            //var value6 = _orderService.TTotalOrderCount();
+            //await Clients.All.SendAsync("ReceiveTotalOrderCount", value6);
+
         }
 
         public async Task GetBookingList()

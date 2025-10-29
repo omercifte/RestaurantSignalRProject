@@ -16,5 +16,7 @@ namespace SignalRDataAccessLayer.Abstract
 
         string ProductNameByMaxPrice();
         string ProductNameByMinPrice();
+        List<Product> GetLast9Products();
+
     }
 }

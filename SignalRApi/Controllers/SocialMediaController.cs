@@ -32,13 +32,15 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public IActionResult CreateSocialMedia(CreateSocialMediaDto createSocialMediaDto)
         {
-            _socialmediaService.TAdd(new SocialMedia()
-            {
-                Title = createSocialMediaDto.Title,
-                Url = createSocialMediaDto.Url,
-                Icon = createSocialMediaDto.Icon
+            var value = _mapper.Map<SocialMedia>(createSocialMediaDto);
+            _socialmediaService.TAdd(value);
+            //_socialmediaService.TAdd(new SocialMedia()
+            //{
+            //    Title = createSocialMediaDto.Title,
+            //    Url = createSocialMediaDto.Url,
+            //    Icon = createSocialMediaDto.Icon
 
-            });
+            //});
             return Ok("Sosyal Medya bilgisi eklendi");
         }
 
@@ -54,20 +56,23 @@ namespace SignalRApi.Controllers
         public IActionResult GetSocialMedia(int id)
         {
             var value = _socialmediaService.TGetByID(id);
-            return Ok(value);
+            //return Ok(value);
+            return Ok(_mapper.Map<GetSocialMediaDto>(value));
         }
 
         [HttpPut]
         public IActionResult UpdateSocialMedia(UpdateSocialMediaDto updateSocialMediaDto)
         {
-            _socialmediaService.TUpdate(new SocialMedia()
-            {
-                SocialMediaID = updateSocialMediaDto.SocialMediaID,
-                Title = updateSocialMediaDto.Title,
-                Url = updateSocialMediaDto.Url,
-                Icon = updateSocialMediaDto.Icon
+            var value = _mapper.Map<SocialMedia>(updateSocialMediaDto);
+            _socialmediaService.TUpdate(value);
+            //_socialmediaService.TUpdate(new SocialMedia()
+            //{
+            //    SocialMediaID = updateSocialMediaDto.SocialMediaID,
+            //    Title = updateSocialMediaDto.Title,
+            //    Url = updateSocialMediaDto.Url,
+            //    Icon = updateSocialMediaDto.Icon
 
-            });
+            //});
             return Ok("Sosyal Medya bilgisi güncellendi");
         }
     }

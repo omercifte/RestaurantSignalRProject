@@ -20,21 +20,14 @@
 				</h2>
 			</div>
 
-			<ul class="filters_menu">
-				<li class="active" data-filter="*">Tüm Ürünler</li>
-				<li data-filter=".burger">Burger</li>
-				<li data-filter=".pizza">Pizza</li>
-				<li data-filter=".pasta">Makarna</li>
-				<li data-filter=".fries">Salatalar</li>
-				<li data-filter=".fries">İçecekler</li>
-				<li data-filter=".fries">Tatlılar</li>
-			</ul>
+			@await Component.InvokeAsync("_MenuCategoryFilterComponentPartial")
+		
 
 			<div class="filters-content">
 				<div class="row grid">
 					@foreach (var item in Model)
 					{
-						<div class="col-sm-6 col-lg-4 all pizza">
+						<div class="col-sm-6 col-lg-4 all @item.CategoryName">
 							<div class="box">
 								<div>
 									<div class="img-box">
@@ -51,7 +44,7 @@
 											<h6>
 												@item.Price ₺
 											</h6>
-											<a href="#" onclick="showproductid(@item.ProductID)">
+											<a href="#" onclick="showproductid(@item.ProductID, @ViewBag.v)">
 												<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
 												<g>
 												<g>
@@ -115,7 +108,7 @@
 			</div>
 			<div class="btn-box">
 				<a href="/Basket/Index/">
-					Sepete Git
+					Sepete Git(@ViewBag.v)
 				</a>
 			</div>
 		</div>
@@ -126,19 +119,24 @@
 	@await Component.InvokeAsync("_UILayoutScriptComponentPartial")
 
 	<script>
-				function showproductid(value) {
-					var id = value;
+				function showproductid(productID, tableID) {
 					$.ajax({
 						type: "Post",
-						data: { item: id },
-						url:"/Menu/AddBasket/" +id,
-						contentType:'json',
-						success: function () {
-							swal("Seçilen Ürün ID:" + id, "Seçtiğiniz Ürün Sepete Eklendi", "success");
+						url:"/Menu/AddBasket/",
+						data: {
+							id:productID,
+							tableID:tableID
 						},
+						success: function () {
+							swal("Seçilen Ürün ID:" + productID, "Seçtiğiniz Ürün Sepete Eklendi", "success");
+						},
+						error:function(xhr, status, error){
+							console.error("Hata:", error);
+							console.log("Yanıt: ", xhr.responseText );
+						}
 		
 			});
-		}
+		};
 	</script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
